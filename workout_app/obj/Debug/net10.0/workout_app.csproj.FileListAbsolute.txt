@@ -1,0 +1,14 @@
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\bin\Debug\net10.0\workout_app.exe
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\bin\Debug\net10.0\workout_app.deps.json
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\bin\Debug\net10.0\workout_app.runtimeconfig.json
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\bin\Debug\net10.0\workout_app.dll
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\bin\Debug\net10.0\workout_app.pdb
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.AssemblyInfoInputs.cache
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.AssemblyInfo.cs
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.csproj.CoreCompileInputs.cache
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.dll
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\refint\workout_app.dll
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.pdb
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.genruntimeconfig.cache
+c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\ref\workout_app.dll
