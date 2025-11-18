@@ -12,3 +12,4 @@ c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\refint
 c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.pdb
 c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.genruntimeconfig.cache
 c:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\ref\workout_app.dll
+C:\Users\tc13g\OneDrive\Desktop\workout_app\workout_app\obj\Debug\net10.0\workout_app.sourcelink.json

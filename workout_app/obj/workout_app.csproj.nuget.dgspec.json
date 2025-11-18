@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\workout_app.csproj": {}
+    "C:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\workout_app.csproj": {}
   },
   "projects": {
-    "c:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\workout_app.csproj": {
+    "C:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\workout_app.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\workout_app.csproj",
+        "projectUniqueName": "C:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\workout_app.csproj",
         "projectName": "workout_app",
-        "projectPath": "c:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\workout_app.csproj",
+        "projectPath": "C:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\workout_app.csproj",
         "packagesPath": "C:\\Users\\tc13g\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\obj\\",
+        "outputPath": "C:\\Users\\tc13g\\OneDrive\\Desktop\\workout_app\\workout_app\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
