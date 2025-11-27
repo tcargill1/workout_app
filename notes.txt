@@ -1,0 +1,19 @@
+Goal of workout app:
+To store reps, sets, and exercises for each day
+Track PRs and review previous workouts
+Each workout session includes title, date, and name of session (Push Day, Pull day, etc)
+Each exercise includes name of exercise, muscle group, sets, reps, and weight done
+
+The menu should look like: 
+Log workout button, review previous workouts button, and exit
+when logging workout, you will create a new session or edit a previous session
+when creating a new session, ask for name of session for title and it will record the date
+then click the + button to add an exercise, when adding an exercise you can add muscle group,
+sets, reps, and weight
+# there is also an exit button to go to previous page, when editing previous session you can click
+# on exercises to edit them or add new exercises (same with creating a session)
+# Layout should look like one line per exercise in a page for a session with PRS highlighted
+# red highlighted if you need to work more on a certain exercise (no progess from either weight
+# or sets)
+
+# When creating the app, ask the user for their name and age to register before seeing the menu
