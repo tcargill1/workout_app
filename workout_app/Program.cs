@@ -11,7 +11,11 @@ namespace Workout
         {
             // Main function to get name and age of user
             string correct = "no";
+            welcome(correct);
+        }
 
+        static void welcome(string correct)
+        {
             while (correct == "no") {
                 string name = enterName();
                 int age = enterAge();
@@ -34,9 +38,22 @@ namespace Workout
         static string enterName()
         {
             // Function to get name of user
-            Console.Write("Enter your name: ");
-            string UserName = Console.ReadLine() ?? string.Empty;
-            return UserName;
+            while (true) {
+                Console.Write("Enter your name: ");
+                string UserName = Console.ReadLine() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(UserName))
+                {
+                    Console.WriteLine("That is not a valid name. Please try again.");
+                    continue;
+                }
+                // reject names that are purely numeric
+                if (int.TryParse(UserName, out _))
+                {
+                    Console.WriteLine("That is not a valid name. Please try again.");
+                    continue;
+                }
+                return UserName;
+            }
         }
 
         static int enterAge()
