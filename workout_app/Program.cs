@@ -2,26 +2,47 @@
 // workout app
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
+using workout_app.Data;
+using workout_app.Models;
+
 
 namespace Workout
 {
-    class User
+    class Program
     {
         static void Main(string[] args)
         {
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseSqlite("Data source=workout.db")
+                .Options;
+            
+            using var db = new AppDbContext(options);
+            db.Database.Migrate();
+
             // Main function to get name and age of user
             string correct = "no";
-            welcome(correct);
+            // Skip this if it already exists in database 
+            if (welcome(correct, db))
+            {
+                foreach (var u in db.Users)
+                {
+                    Console.WriteLine($"{u.Id}: {u.Name} ({u.Age})");
+                }
+                // add menu component here from menu.cs
+            }
         }
 
-        static void welcome(string correct)
+        static bool welcome(string correct, AppDbContext db)
         {
+            string name = "";
+            int age = 0;
             while (correct == "no") {
-                string name = enterName();
-                int age = enterAge();
+                name = enterName();
+                age = enterAge();
 
                 if (age < 18) {
-                    break;
+                    return false;
                 }
 
                 Console.WriteLine("Welcome " + name + " to this workout app. You are " + age + 
@@ -33,6 +54,10 @@ namespace Workout
                     correct = "no";
                 }
             }
+
+            db.Users.Add(new workout_app.Models.User { Name=name, Age=age});
+            db.SaveChanges();
+            return true;
         }
 
         static string enterName()
