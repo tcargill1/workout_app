@@ -17,3 +17,8 @@ sets, reps, and weight
 # or sets)
 
 # When creating the app, ask the user for their name and age to register before seeing the menu
+
+Goal for today:
+Users don't have to sign up again if they are already in the database
+Attach a username and password to age and name and have them login with username and password
+if they don't have one and click sign up, then they go to name, age, username, and password

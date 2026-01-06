@@ -1,10 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 // workout app
-using System.Runtime.CompilerServices;
+using System.Text;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using workout_app.Data;
 using workout_app.Models;
+using System.Runtime.InteropServices.Marshalling;
 
 
 namespace Workout
@@ -21,9 +22,31 @@ namespace Workout
             db.Database.Migrate();
 
             // Main function to get name and age of user
-            string correct = "no";
+            var correct = false;
+
+            Console.WriteLine("Would you like to login or sign up?");
+            string answer = (Console.ReadLine() ?? string.Empty).ToLowerInvariant();
+            
+            while (true)
+            {
+                if (answer == "login")
+                {
+                    correct = Login(db);
+                    break;
+                }
+                else if (answer == "sign up" || answer == "signup")
+                {
+                    correct = welcome(correct, db);
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Please type login or sign up. Try Again.");
+                }
+            }
+
             // Skip this if it already exists in database 
-            if (welcome(correct, db))
+            if (correct)
             {
                 foreach (var u in db.Users)
                 {
@@ -33,57 +56,186 @@ namespace Workout
             }
         }
 
-        static bool welcome(string correct, AppDbContext db)
+        static string HashPassword(string password)
         {
-            string name = "";
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
+
+        static bool Login(AppDbContext db)
+        {
+            string username = EnterExistingUsername(db);
+            if (username == "")
+            {
+                return false;
+            }
+            string passwordHash = EnterExistingPassword();
+
+            return db.Users.Any(u => u.Username == username && u.PasswordHash == passwordHash);
+        }
+
+        static bool welcome(bool correct, AppDbContext db)
+        {
+            string name = "", username = "", passwordHash = "";
             int age = 0;
-            while (correct == "no") {
-                name = enterName();
-                age = enterAge();
+            while (!correct) {
+                name = EnterName();
+                age = EnterAge();
+                username = EnterNewUsername(db);
+                passwordHash = EnterNewPassword();
 
-                if (age < 18) {
-                    return false;
-                }
-
-                Console.WriteLine("Welcome " + name + " to this workout app. You are " + age + 
-                " years old.");
+                Console.WriteLine("Welcome " + username + " to this workout app." 
+                + "Your name is " + name + " You are " + age + " years old.");
                 Console.WriteLine("Is this correct? (reply with yes or no)");
-                correct = (Console.ReadLine() ?? string.Empty).ToLowerInvariant();
+                string answer = (Console.ReadLine() ?? string.Empty).ToLowerInvariant();
 
-                if (correct != "yes" && correct != "no") {
-                    correct = "no";
+                if (answer == "yes")
+                {
+                    correct = true;
+                }
+                if (answer != "yes" && answer != "no")
+                {
+                    Console.WriteLine("You didn't write a yes or no answer, please try again.");
                 }
             }
 
-            db.Users.Add(new workout_app.Models.User { Name=name, Age=age});
+            db.Users.Add(new workout_app.Models.User { Name=name, Age=age, Username=username, PasswordHash=passwordHash});
             db.SaveChanges();
             return true;
         }
 
-        static string enterName()
+        static string EnterNewUsername(AppDbContext db)
+        {
+            while (true)
+            {
+                Console.Write("Enter your username: ");
+                string username = Console.ReadLine() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    Console.WriteLine("That is not a valid username. Please try again.");
+                    continue;
+                }
+                
+                if (db.Users.Any(u => u.Username == username))
+                {
+                    Console.WriteLine("That username is already taken. Please try again.");
+                    continue;
+                }
+
+                return username;
+            }
+        }
+
+        static string EnterExistingUsername(AppDbContext db)
+        {
+            while (true)
+            {
+                Console.Write("Enter your username: ");
+                string username = Console.ReadLine() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    Console.WriteLine("That is not a valid username. Please try again.");
+
+                    Console.WriteLine("Would you like to go back to the sign up page? (Type yes if so)");
+                    string ans = Console.ReadLine() ?? string.Empty;
+                    if (ans == "yes")
+                    {
+                        return "";
+                    }
+
+                    continue;
+                }
+                
+                if (!db.Users.Any(u => u.Username == username))
+                {
+                    Console.WriteLine("No Account with that username. Please try again.");
+
+                    Console.WriteLine("Would you like to go back to the sign up page? (Type yes if so)");
+                    string ans = (Console.ReadLine() ?? string.Empty).Trim().ToLowerInvariant();;
+                    if (ans == "yes")
+                    {
+                        return "";
+                    }
+
+                    continue;
+                }
+
+                
+
+                return username;
+            }
+        }
+
+        static string EnterNewPassword()
+        {   
+            while (true)
+            {
+                Console.Write("Enter your password: ");
+                string password = Console.ReadLine() ?? string.Empty;
+                
+                Console.Write("Write your password again: ");
+                string secondPassword = Console.ReadLine() ?? string.Empty;
+
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    Console.WriteLine("That is not a valid password. Please try again.");
+                    continue;
+                }
+                if (password != secondPassword)
+                {
+                    Console.WriteLine("The password don't match. Please try again.");
+                    continue;
+                }
+
+                return HashPassword(password);
+            }
+        }
+
+        static string EnterExistingPassword()
+        {
+            while (true)
+            {
+                Console.Write("Enter your password: ");
+                string password = Console.ReadLine() ?? string.Empty;
+
+
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    Console.WriteLine("That is not a valid password. Please try again.");
+                    continue;
+                }
+                return HashPassword(password);
+            }
+        }
+
+        static string EnterName()
         {
             // Function to get name of user
             while (true) {
                 Console.Write("Enter your name: ");
-                string UserName = Console.ReadLine() ?? string.Empty;
-                if (string.IsNullOrWhiteSpace(UserName))
+                string name = Console.ReadLine() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(name))
                 {
                     Console.WriteLine("That is not a valid name. Please try again.");
                     continue;
                 }
                 // reject names that are purely numeric
-                if (int.TryParse(UserName, out _))
+                if (int.TryParse(name, out _))
                 {
                     Console.WriteLine("That is not a valid name. Please try again.");
                     continue;
                 }
-                return UserName;
+                return name;
             }
         }
 
-        static int enterAge()
+        static int EnterAge()
         {
-            // Function to get age of user and make sure they're 18+
+            while (true)
+            {
+                // Function to get age of user and make sure they're 18+
             int user_age = 0;
             try
             {
@@ -94,15 +246,17 @@ namespace Workout
             catch(FormatException e) 
             {
                 Console.WriteLine(e.Message);
+                continue;
             }
             
-
             if (user_age < 18)
             {
                 Console.Write("Sorry but you need to be 18 years or older to use this app.");
+                continue;
             }
 
             return user_age;
+            }
         }
     }
 }
