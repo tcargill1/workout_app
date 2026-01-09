@@ -7,8 +7,9 @@
 // when editing name, will bring you to workouts.cs
 
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
-namespace Menu
+namespace workout_app.Menu
 {
     public class mainInterface
     {
@@ -19,26 +20,41 @@ namespace Menu
             while (running)
             {
                 Console.WriteLine("Welcome to Workout App" + name + "!");
-                Console.WriteLine("To exit the app, press Q.");
+                Console.WriteLine("[w] Log Workout | [R] Review Workout | [Q] Quit");
 
-                ConsoleKeyInfo key = Console.ReadKey(true);
-                if (key.Key == ConsoleKey.Q)
+                var key = Console.ReadKey(true).Key;
+
+                switch (key)
                 {
-                    running = false;
+                    case ConsoleKey.Q:
+                        running = false;
+                        break;
+                    
+                    case ConsoleKey.W:
+                        NewWorkout();
+                        break;
+                    
+                    case ConsoleKey.R:
+                        Review();
+                        break;
+                    
+                    default:
+                        Console.WriteLine("Please press W, R, or Q to continue.");
+                        break;
                 }
             }
-
-
         }
 
-        static private void newWorkout()
+        static private void NewWorkout()
         {
-            
+            // Create a workout object for this and a collection of workouts object as well
+            Console.WriteLine("What would you like to name today's workout?");
+            string day = Console.ReadLine() ?? "";
         }
 
         static private void Review()
         {
-            
+            Console.WriteLine("Reviewing");
         }
     }
 }

@@ -6,9 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using workout_app.Data;
 using workout_app.Models;
 using System.Runtime.InteropServices.Marshalling;
+using workout_app.Menu;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
-
-namespace Workout
+namespace workout_app.Workout
 {
     class Program
     {
@@ -23,20 +24,24 @@ namespace Workout
 
             // Main function to get name and age of user
             var correct = false;
-
-            Console.WriteLine("Would you like to login or sign up?");
-            string answer = (Console.ReadLine() ?? string.Empty).ToLowerInvariant();
-            
+            User? currentUser = null;
             while (true)
             {
+                Console.WriteLine("Would you like to login or sign up?");
+                string answer = (Console.ReadLine() ?? string.Empty).ToLowerInvariant();
+
                 if (answer == "login")
                 {
-                    correct = Login(db);
+                    currentUser = Login(db);
+                    if (currentUser == null) 
+                    {
+                        continue;
+                    }
                     break;
                 }
                 else if (answer == "sign up" || answer == "signup")
                 {
-                    correct = welcome(correct, db);
+                    currentUser = welcome(correct, db);
                     break;
                 }
                 else
@@ -45,14 +50,15 @@ namespace Workout
                 }
             }
 
-            // Skip this if it already exists in database 
-            if (correct)
+            // menu starts when logged in or signed up
+            if (currentUser != null)
             {
                 foreach (var u in db.Users)
                 {
                     Console.WriteLine($"{u.Id}: {u.Name} ({u.Age})");
                 }
-                // add menu component here from menu.cs
+                // TODO: add menu component here from menu.cs
+                mainInterface.Interface(currentUser.Name);
             }
         }
 
@@ -64,19 +70,29 @@ namespace Workout
             return Convert.ToBase64String(hash);
         }
 
-        static bool Login(AppDbContext db)
+        static User? Login(AppDbContext db)
         {
             string username = EnterExistingUsername(db);
             if (username == "")
             {
-                return false;
+                return null;
             }
             string passwordHash = EnterExistingPassword();
 
-            return db.Users.Any(u => u.Username == username && u.PasswordHash == passwordHash);
+            var user = db.Users.FirstOrDefault(u =>
+                u.Username == username &&
+                u.PasswordHash == passwordHash
+            );
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user;
         }
 
-        static bool welcome(bool correct, AppDbContext db)
+        static User? welcome(bool correct, AppDbContext db)
         {
             string name = "", username = "", passwordHash = "";
             int age = 0;
@@ -87,7 +103,7 @@ namespace Workout
                 passwordHash = EnterNewPassword();
 
                 Console.WriteLine("Welcome " + username + " to this workout app." 
-                + "Your name is " + name + " You are " + age + " years old.");
+                + " Your name is " + name + ". You are " + age + " years old.");
                 Console.WriteLine("Is this correct? (reply with yes or no)");
                 string answer = (Console.ReadLine() ?? string.Empty).ToLowerInvariant();
 
@@ -101,9 +117,17 @@ namespace Workout
                 }
             }
 
-            db.Users.Add(new workout_app.Models.User { Name=name, Age=age, Username=username, PasswordHash=passwordHash});
+            var user = new User 
+            {
+                Name = name,
+                Age = age,
+                Username = username,
+                PasswordHash = passwordHash
+            };
+
+            db.Users.Add(user);
             db.SaveChanges();
-            return true;
+            return user;
         }
 
         static string EnterNewUsername(AppDbContext db)
